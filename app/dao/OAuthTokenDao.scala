@@ -4,6 +4,7 @@ package dao
 import javax.inject.Inject
 
 import models.OAuthToken
+import models.rails.Tables
 import org.joda.time.DateTime
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.db.slick.HasDatabaseConfigProvider
@@ -22,8 +23,9 @@ class OAuthTokenDao @Inject() (@NamedDatabase("default") protected val dbConfigP
 
   private val OAuthTokens = TableQuery[OAuthTokensTable]
 
-  def findByToken(token: String): Future[Option[OAuthToken]] =
-    db.run(OAuthTokens.filter(_.token === token).result.headOption)
+  def findByToken(token: String): Future[Option[Tables.OauthAccessTokensRow]] =
+      db.run(Tables.OauthAccessTokens.filter(_.token === token).result.headOption)
+//    db.run(OAuthTokens.filter(_.token === token).result.headOption)
 
 
   private class OAuthTokensTable(tag: Tag) extends Table[OAuthToken](tag, "oauth_access_tokens") {
